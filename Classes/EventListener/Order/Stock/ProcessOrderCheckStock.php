@@ -56,9 +56,14 @@ class ProcessOrderCheckStock
             }
 
             foreach ($product->getBeVariants() as $beVariant) {
-                $quantityInStock = $beVariant->getStock();
-                if ($compareQuantity > $quantityInStock) {
-                    $this->falseAvailability($event, $product->getTitle(), $beVariant->getSku(), $quantityInStock);
+                foreach ($cartProduct->getBeVariants() as $cartBeVariant) {
+                    if($cartBeVariant->getSku() !== $beVariant->getSku()) {
+                        continue;
+                    }
+                    $quantityInStock = $beVariant->getStock();
+                    if ($compareQuantity > $quantityInStock) {
+                        $this->falseAvailability($event, $product->getTitle(), $beVariant->getSku(), $quantityInStock);
+                    }
                 }
             }
         }
